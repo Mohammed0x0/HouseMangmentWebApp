@@ -1,0 +1,36 @@
+﻿@model HouseMangment.Entity.Devices
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Device</h4>
+    <hr />
+    <a href="@Url.Action("index")"><button type="button" class="btn btn-outline-info">back</button></a>
+    <a href="@Url.Action( "Edit", new { id = Model.Id })"><button type="button" class="btn btn-outline-dark">Edit</button></a>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SerialNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SerialNumber)
+        </dd>
+
+
+
+    </dl>
+</div>

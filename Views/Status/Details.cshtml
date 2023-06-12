@@ -1,0 +1,61 @@
+﻿@model HouseMangment.Entity.Status
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Status</h4>
+    <hr />
+    <div>
+        <a href="@Url.Action("index")"><button type="button" class="btn btn-outline-info">back</button></a>
+        <a href="@Url.Action( "Edit", new { id = Model.Id })"><button type="button" class="btn btn-outline-dark">Edit</button></a>
+
+    </div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DateStart)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateStart)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.isActive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.isActive)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Devices.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Devices.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Users.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Users.name)
+        </dd>
+
+    </dl>
+</div>
+

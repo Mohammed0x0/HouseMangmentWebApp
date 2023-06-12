@@ -1,0 +1,82 @@
+﻿@model IEnumerable<HouseMangment.Entity.Status>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<h2>  Active Assign</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissable">
+        <strong>Executed successfully</strong>
+    </div>
+}
+else if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-success alert-danger">
+        <strong>an error occurred</strong>
+    </div>
+}
+
+<div>
+    <br>
+    <a href="@Url.Action("HestoryAssign")"><button type="button" class="btn btn-outline-dark">Hestory Assign</button></a>
+    <hr>
+</div>
+
+<div>
+    <br>
+    <a href="@Url.Action("Create")"><button type="button" class="btn btn-outline-success">Assing Device</button></a>
+    
+</div>
+<br>
+<table class="table" id="DataTable1">
+    <thead>
+        <tr>
+            <th>
+                Device name
+            </th>
+            <th>
+                Device Serial
+            </th>
+            <th>
+                User Name
+            </th>
+            <th>
+                Date and Time
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Devices.Name)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Devices.SerialNumber)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Users.name)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateStart)
+                </td>
+
+                <td>
+                    <a href="@Url.Action("Unassing", new { id = item.Id })"><button class="btn btn-danger">Unassing</button></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

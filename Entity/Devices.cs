@@ -11,7 +11,7 @@ namespace HouseMangment.Entity
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class Devices
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,12 +19,15 @@ namespace HouseMangment.Entity
         {
             this.Status = new HashSet<Status>();
         }
-    
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string SerialNumber { get; set; }
         public bool isActive { get; set; }
-    
+
+        public string numser { get { return Name + " - " + SerialNumber; } }
+
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Status> Status { get; set; }
     }

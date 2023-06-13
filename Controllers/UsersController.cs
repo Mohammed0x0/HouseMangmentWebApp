@@ -17,7 +17,18 @@ namespace HouseMangment.Controllers
         // GET: Users
         public ActionResult Index()
         {
-            return View(db.Users.ToList());
+            var user = db.Users.Where(x => x.isActive == true && x.isAdmin == false && x.IsDeleted != true).ToList();
+            int countnoactive = db.Users.Where(x => x.isActive == false && x.isAdmin == false && x.IsDeleted != true).Count();
+            if (countnoactive > 0) { ViewBag.coun = countnoactive; }
+            return View(user);
+        }
+
+        public ActionResult InactiveUsers()
+        {
+            var users = db.Users.Where(x => x.isActive == false && x.isAdmin == false && x.IsDeleted != true).ToList();
+            return View(users);
+
+
         }
 
         // GET: Users/Details/5
@@ -78,7 +89,7 @@ namespace HouseMangment.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,name,phone,username,isAdmin,isActive,Password")] Users users)
+        public ActionResult Edit( Users users)
         {
             if (ModelState.IsValid)
             {
@@ -115,13 +126,75 @@ namespace HouseMangment.Controllers
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
+         public ActionResult Login()
         {
-            if (disposing)
+            if (Session["UserName"] == null)
             {
-                db.Dispose();
+                return View();
             }
-            base.Dispose(disposing);
+            else
+            {
+             return RedirectToAction("Index");
+            }
         }
-    }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Login(Users user)
+        {
+            var tryLogin = db.Users.Where(u => u.username == user.username && u.Password == user.Password && u.isActive ==true && u.IsDeleted !=true).FirstOrDefault();
+            if (tryLogin != null)
+            {
+
+                if (user.isAdmin == true)
+                {
+                    Session["Admin"] = true;
+                    return RedirectToAction("users");
+
+                } else
+                {
+                    return RedirectToAction("users","myassign");
+
+                }
+            }
+            else
+            {
+                ViewBag.Login = "تأكد من كلمة المرور واسم المستخدم";
+            }
+            return View();
+        }
+
+        public ActionResult Register()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Register(Users user)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Message = "تأكد من البيانات المدخلة";
+            }
+            
+                var compare = db.Users.Where(m => m.username == user.username).Count();
+                while (compare > 0)
+                {
+                    ViewBag.Message = "هذا المستخدم موجود مسبقاً";
+                    return View();
+                }
+                var add = db.Users.Add(user);
+                add.isActive = false;
+                add.isAdmin = false;
+
+                db.SaveChanges();
+                ViewBag.Message = "تم تسجيلك بنجاح";
+                return RedirectToAction("Login", "User");
+            
+        }
+    
+
+
+
+}
 }

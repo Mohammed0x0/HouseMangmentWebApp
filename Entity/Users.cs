@@ -27,8 +27,11 @@ namespace HouseMangment.Entity
         public Nullable<bool> isAdmin { get; set; }
         public Nullable<bool> isActive { get; set; }
         public string Password { get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Status> Status { get; set; }
+        public string numuser { get { return name + " - " + username; } }
+
     }
 }

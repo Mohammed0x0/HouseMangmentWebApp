@@ -21,10 +21,18 @@ else if (TempData["ErrorMessage"] != null)
 }
 
 
-<p>
+<div>
+    <br>
+    <a href="@Url.Action("InactiveUsers")"><button type="button" class="btn btn-outline-dark">InactiveUsers 
+        
+        @if (ViewBag.coun != null){
+  <span style="background-color: red; width: 24px; display: inherit; padding: 2px; color: white; border-radius: 50%;">
+        @ViewBag.coun</span>
+        }
+         </button></a>
+    <hr>
+</div>
 
-    @Html.ActionLink("Create New", "Create")
-</p>
 
 
 <table class="table" id="DataTable1">
@@ -39,15 +47,6 @@ else if (TempData["ErrorMessage"] != null)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.username)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.isAdmin)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.isActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Password)
             </th>
             <th></th>
         </tr>
@@ -65,15 +64,6 @@ else if (TempData["ErrorMessage"] != null)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.username)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.isAdmin)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.isActive)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Password)
                 </td>
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |

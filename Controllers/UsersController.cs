@@ -110,8 +110,14 @@ namespace HouseMangment.Controllers
                 {
                     if (ModelState.IsValid)
             {
-                db.Entry(users).State = EntityState.Modified;
-                db.SaveChanges();
+                    var upd = db.Users.Find(users.Id);
+                    upd.name = users.name;
+                    upd.phone = users.phone;
+                    upd.username = users.username;
+                    upd.Password = users.Password; 
+
+                    db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
             return View(users);

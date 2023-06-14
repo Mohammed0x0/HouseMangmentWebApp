@@ -7,11 +7,16 @@
     @Styles.Render("~/Content/css")
     @Styles.Render("https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css")
     @Scripts.Render("~/bundles/modernizr")
+    <style>
+        .navbar.bg-dark {
+            background-color: #1c578c !important;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
         <div class="container">
-            @Html.ActionLink("WhereHouse Mangment", "Index", "users", new { area = "" }, new { @class = "navbar-brand" })
+            @Html.ActionLink("Warehouse Management", "Index", "users", new { area = "" }, new { @class = "navbar-brand" })
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -42,7 +47,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <center><p>&copy; @DateTime.Now.Year - Made with love: Mohammed - Hassan - Nawaf - Saleh</p></center>
         </footer>
     </div>
 

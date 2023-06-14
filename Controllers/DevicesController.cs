@@ -120,7 +120,9 @@ namespace HouseMangment.Controllers
                                 {
                                     if (ModelState.IsValid)
             {
-                db.Entry(devices).State = EntityState.Modified;
+                var upd = db.Devices.Find(devices.Id);
+                    upd.SerialNumber = devices.SerialNumber;
+                    upd.Name = devices.Name;
                 db.SaveChanges();
                 return RedirectToAction("Index", TempData["SuccessMessage"] = true);
             }

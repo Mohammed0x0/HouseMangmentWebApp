@@ -1,0 +1,62 @@
+﻿@model IEnumerable<HouseMangment.Entity.Status>
+
+@{
+    ViewBag.Title = "myoldassign";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>myoldassign</h2>
+<div>
+    <br>
+    <a href="@Url.Action("myassign")"><button type="button" class="btn btn-outline-dark">Back</button></a>
+    <hr>
+</div>
+<br>
+<table class="table" id="DataTable1">
+    <thead>
+        <tr>
+            <th>
+                Device name
+            </th>
+            <th>
+                Device Serial
+            </th>
+            <th>
+                User Name
+            </th>
+            <th>
+                DateStart
+            </th>
+            <th>
+                DateEnd
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Devices.Name)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Devices.SerialNumber)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Users.name)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateStart)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

@@ -7,28 +7,46 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.Web.Http.Results;
 using System.Web.Mvc;
 using HouseMangment.Entity;
 
 namespace HouseMangment.Controllers
+
 {
     public class StatusController : Controller
-    {
-        private WhereHouseEntities db = new WhereHouseEntities();
 
-        // GET: Status
+    {
+        public bool hisadmin = UsersController.hisadmin;
+        private WhereHouseEntities db = new WhereHouseEntities();
         public ActionResult Index()
         {
-            var status = db.Status.Where(x => x.isActive == true).Include(s => s.Devices).Include(s => s.Users);
-            return View(status.ToList());
+            if (hisadmin == true)
+            {
+                var status = db.Status.Where(x => x.isActive == true).Include(s => s.Devices).Include(s => s.Users);
+                return View(status.ToList());
+            }
+
+            else
+            {
+                return RedirectToAction("login" ,"users");
+            }
         }
 
         public ActionResult HestoryAssign()
         {
-            var status = db.Status.Where(x => x.isActive == false).Include(s => s.Devices).Include(s => s.Users);
-            return View(status.ToList());
+            if (hisadmin == true)
+            {
+                var status = db.Status.Where(x => x.isActive == false).Include(s => s.Devices).Include(s => s.Users);
+                return View(status.ToList());
+            }
+
+            else
+            {
+                return RedirectToAction("login", "users");
+            }
         }
-        
+
         // GET: Status/Create
         public ActionResult Create()
         {
@@ -68,11 +86,19 @@ namespace HouseMangment.Controllers
             //var filteredEmployees = db.Devices.Where(a => a.isActive == true && !db.Status.Where(b => b.isActive == true).Select(b => b.Device_id).Contains(a.Id)).ToList();
 
 
-            
-            ViewBag.Device_id = new SelectList(db.Devices.Where(a => a.isActive == true && !db.Status.Where(b => b.isActive == true).Select(b => b.Device_id).Contains(a.Id)), "Id", "numser");
-            ViewBag.User_id = new SelectList(db.Users.Where(d => d.isActive == true && d.isAdmin == false && d.IsDeleted != true), "Id", "numuser");
-            return View();
+            if (hisadmin == true)
+            {
+                ViewBag.Device_id = new SelectList(db.Devices.Where(a => a.isActive == true && !db.Status.Where(b => b.isActive == true).Select(b => b.Device_id).Contains(a.Id)), "Id", "numser");
+                ViewBag.User_id = new SelectList(db.Users.Where(d => d.isActive == true && d.isAdmin == false && d.IsDeleted != true), "Id", "numuser");
+                return View();
+            }
+
+            else
+            {
+                return RedirectToAction("login", "users");
+            }
         }
+
 
         // POST: Status/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
@@ -81,30 +107,77 @@ namespace HouseMangment.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Status status)
         {
-            if (ModelState.IsValid)
+            if (hisadmin == true)
             {
-                db.Status.Add(status);
-                status.isActive = true;
-                status.DateStart = DateTime.Now;
-                db.SaveChanges();
-                return RedirectToAction("Index" , TempData["SuccessMessage"] = true);
+                if (ModelState.IsValid)
+                {
+                    db.Status.Add(status);
+                    status.isActive = true;
+                    status.DateStart = DateTime.Now;
+                    db.SaveChanges();
+                    return RedirectToAction("Index", TempData["SuccessMessage"] = true);
+                }
+
+                ViewBag.Device_id = new SelectList(db.Devices.Where(a => a.isActive == true && !db.Status.Where(b => b.isActive == true).Select(b => b.Device_id).Contains(a.Id)), "Id", "numser");
+                ViewBag.User_id = new SelectList(db.Users.Where(d => d.isActive == true && d.isAdmin == false && d.IsDeleted != true), "Id", "numuser");
+                return View(status);
             }
 
-            ViewBag.Device_id = new SelectList(db.Devices.Where(a => a.isActive == true && !db.Status.Where(b => b.isActive == true).Select(b => b.Device_id).Contains(a.Id)), "Id", "numser");
-            ViewBag.User_id = new SelectList(db.Users.Where(d => d.isActive == true && d.isAdmin == false && d.IsDeleted != true), "Id", "numuser");
-            return View(status);
+            else
+            {
+                return RedirectToAction("login", "users");
+            }
         }
 
 
         public ActionResult Unassing(int id)
         {
-            
-            var findid = db.Status.Find(id);
-            findid.isActive = false;
-            findid.EndDate = DateTime.Now;
-            db.SaveChanges();
-            return RedirectToAction("Index", TempData["SuccessMessage"] = true);
+            if (hisadmin == true)
+            {
+                var findid = db.Status.Find(id);
+                findid.isActive = false;
+                findid.EndDate = DateTime.Now;
+                db.SaveChanges();
+                return RedirectToAction("Index", TempData["SuccessMessage"] = true);
+
+            }
+
+            else
+            {
+                return RedirectToAction("login", "users");
+            }
+
         }
+
+
+        public ActionResult myAssign()
+        {
+            if (UsersController.logged == true)
+            {
+                var status = db.Status.Where(x => x.isActive == true && x.User_id == UsersController.myid).Include(s => s.Devices).Include(s => s.Users);
+                return View(status.ToList());
+            }
+
+            else
+            {
+                return RedirectToAction("users" ,"login");
+            }
+        }
+
+        public ActionResult myoldassign()
+        {
+            if (UsersController.logged == true)
+            {
+                var status = db.Status.Where(x => x.isActive == false && x.User_id == UsersController.myid).Include(s => s.Devices).Include(s => s.Users);
+                return View(status.ToList());
+            }
+
+            else
+            {
+                return RedirectToAction("login", "users");
+            }
+        }
+
 
     }
 }

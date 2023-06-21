@@ -6,7 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Providers.Entities;
 using HouseMangment.Entity;
+using Rotativa;
+
 
 namespace HouseMangment.Controllers
 {
@@ -17,20 +20,24 @@ namespace HouseMangment.Controllers
         // GET: Devices
         public ActionResult Index()
         {
+            // Check if the user is an admin
             if (hisadmin == true)
             {
+                // Fetch and display the active devices
                 return View(db.Devices.Where(x => x.isActive == true).ToList());
             }
             else
-            {
-                               return RedirectToAction("login", "users");
+            {                
+                // Redirect to the login page if the user is not an admin
+                return RedirectToAction("login", "users");
             }
         }
 
         // GET: Devices/Details/5
         public ActionResult Details(int? id)
         {
-                if (hisadmin == true)
+            // Check if the user is an admin
+            if (hisadmin == true)
                 {
                     if (id == null)
             {
@@ -52,7 +59,8 @@ namespace HouseMangment.Controllers
         // GET: Devices/Create
         public ActionResult Create()
         {
-                    if (hisadmin == true)
+            // Check if the user is an admin
+            if (hisadmin == true)
                     {
                         return View();
                     }
@@ -69,7 +77,8 @@ namespace HouseMangment.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Devices devices)
         {
-                        if (hisadmin == true)
+            // Check if the user is an admin
+            if (hisadmin == true)
                         {
                             if (ModelState.IsValid)
             {
@@ -90,7 +99,8 @@ namespace HouseMangment.Controllers
         // GET: Devices/Edit/5
         public ActionResult Edit(int? id)
         {
-                            if (hisadmin == true)
+            // Check if the user is an admin
+            if (hisadmin == true)
                             {
                                 if (id == null)
             {
@@ -116,9 +126,10 @@ namespace HouseMangment.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit( Devices devices)
         {
-                                if (hisadmin == true)
-                                {
-                                    if (ModelState.IsValid)
+            // Check if the user is an admin
+            if (hisadmin == true)
+            {
+           if (ModelState.IsValid)
             {
                 var upd = db.Devices.Find(devices.Id);
                     upd.SerialNumber = devices.SerialNumber;
@@ -137,7 +148,8 @@ namespace HouseMangment.Controllers
         // GET: Devices/Delete/5
         public ActionResult Delete(int? id)
         {
-                                    if (hisadmin == true)
+            // Check if the user is an admin
+            if (hisadmin == true)
                                     {
                                         if (id == null)
             {
@@ -152,9 +164,15 @@ namespace HouseMangment.Controllers
             var checkUnassign = db.Status.Where(x => x.Device_id == id && x.isActive == true).Any();
             if (checkUnassign)
             {
-                TempData["inassign"] = true;
+                    TempData["inassign"] = true;
+                    return RedirectToAction("index");
+                }
+                else
+                {
 
-            }
+                    TempData["id"] = devices.Id;
+                    return RedirectToAction("index");
+                }
 
             return View(devices);
                                     }
@@ -164,25 +182,36 @@ namespace HouseMangment.Controllers
                                     }
                                 }
 
-        // POST: Devices/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult Deletet(int id)
         {
-                                        if (hisadmin == true)
+            // Check if the user is an admin
+            if (hisadmin == true)
                                         {
 
                                             var findid = db.Devices.Find(id);
             findid.isActive = false;
             db.SaveChanges();
-            return RedirectToAction("Index");
-                                        }
-                                        else
+            return RedirectToAction("Index", TempData["deleted"] = true);
+            }
+            else
                                         {
               return RedirectToAction("login", "users");
                                         }
                                     }
 
+        public ActionResult ReportDevices()
+        {
+            if (hisadmin == true)
+            {
+
+                var devices = db.Devices.Where(x => x.isActive == true).ToList();
+                return new ViewAsPdf("ReportDevices", devices);
+            }
+            else
+            {
+                return RedirectToAction("login", "users");
+            }
+        }
 
     }
 }

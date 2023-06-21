@@ -6,8 +6,11 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Providers.Entities;
 using System.Web.UI.WebControls;
 using HouseMangment.Entity;
+using Rotativa;
+
 
 namespace HouseMangment.Controllers
 {
@@ -19,14 +22,18 @@ namespace HouseMangment.Controllers
         public static bool hisadmin;
         public static bool logged;
         public static int myid;
+        public static string username;
 
         private WhereHouseEntities db = new WhereHouseEntities();
 
         // GET: Users
         public ActionResult Index()
         {
-            if (hisadmin == true) { 
-            var user = db.Users.Where(x => x.isActive == true && x.isAdmin == false && x.IsDeleted != true).ToList();
+// Check if the user is an admin
+if (hisadmin == true) 
+            { 
+
+            var user = db.Users.Where(x => x.isActive == true && x.isAdmin != true && x.IsDeleted != true).ToList();
             int countnoactive = db.Users.Where(x => x.isActive != true && x.isAdmin != true && x.IsDeleted != true).Count();
             if (countnoactive > 0) { ViewBag.coun = countnoactive; }
             return View(user);
@@ -39,6 +46,7 @@ namespace HouseMangment.Controllers
 
         public ActionResult InactiveUsers()
         {
+            // Check if the user is an admin
             if (hisadmin == true)
             {
 
@@ -55,6 +63,7 @@ namespace HouseMangment.Controllers
         // GET: Users/Details/5
         public ActionResult Details(int? id)
         {
+            // Check if the user is an admin
             if (hisadmin == true)
             {
                 if (id == null)
@@ -79,6 +88,7 @@ namespace HouseMangment.Controllers
         // GET: Users/Edit/5
         public ActionResult Edit(int? id)
         {
+            // Check if the user is an admin
             if (hisadmin == true)
             {
                 if (id == null)
@@ -106,7 +116,8 @@ namespace HouseMangment.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit( Users users)
         {
-                if (hisadmin == true)
+            // Check if the user is an admin
+            if (hisadmin == true)
                 {
                     if (ModelState.IsValid)
             {
@@ -114,12 +125,18 @@ namespace HouseMangment.Controllers
                     upd.name = users.name;
                     upd.phone = users.phone;
                     upd.username = users.username;
-                    upd.Password = users.Password; 
+                    upd.Password = users.Password;
+                    var compare = db.Users.Where(m => m.username == users.username).Where(u => u.Id != users.Id).Count();
+                    while (compare > 0)
+                    {
+                        return RedirectToAction("edit", TempData["username"] = true);
 
+                    }
                     db.SaveChanges();
 
-                return RedirectToAction("Index");
-            }
+
+                    return RedirectToAction("index", TempData["SuccessMessage"] = true);
+                }
             return View(users);
             }
             else
@@ -131,6 +148,7 @@ namespace HouseMangment.Controllers
 
         public ActionResult Delete(int? id)
         {
+            // Check if the user is an admin
             if (hisadmin == true)
             {
                 if (id == null)
@@ -148,10 +166,15 @@ namespace HouseMangment.Controllers
                 {
                     TempData["countdev"] = checkUnassign;
                     TempData["inassign"] = true;
-
+                    return RedirectToAction("index");
                 }
+                else
+                {
 
-                return View(user);
+                    TempData["name"] = user.name;
+                    TempData["id"] = user.Id;
+                    return RedirectToAction("index");
+                }
             }
             else
             {
@@ -159,18 +182,17 @@ namespace HouseMangment.Controllers
             }
         }
 
-        // POST: Devices/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+
+        public ActionResult Deletet(int id)
         {
+            // Check if the user is an admin
             if (hisadmin == true)
             {
 
                 var findid = db.Users.Find(id);
                 findid.IsDeleted = true;
                 db.SaveChanges();
-                return RedirectToAction("Index", TempData["SuccessMessage"] = true);
+                return RedirectToAction("Index", TempData["deleted"] = true);
             }
             else
             {
@@ -188,6 +210,7 @@ namespace HouseMangment.Controllers
             }
             else
             {
+                // Check if the user is an admin
                 if (hisadmin != true)
                 {
                     return RedirectToAction("myassign", "status");
@@ -210,19 +233,24 @@ namespace HouseMangment.Controllers
             var tryLogin = db.Users.Where(u => u.username == user.username && u.Password == user.Password && u.isActive ==true && u.IsDeleted !=true).FirstOrDefault();
             if (tryLogin != null)
             {
-
-                if (tryLogin.isAdmin == true)
+                    // Check if the user is an admin
+                    if (tryLogin.isAdmin == true)
                 {
 
                     hisadmin = true;
                     logged = true;
-                    return RedirectToAction("index");
+                    myid = tryLogin.Id;
+                    username = tryLogin.username;
+
+                        return RedirectToAction("index");
 
                 } else
                 {
-                                     myid = tryLogin.Id;
+                                    myid = tryLogin.Id;
                                     logged = true;
-                                    return RedirectToAction("myassign", "status");
+                        username = tryLogin.username;
+
+                        return RedirectToAction("myassign", "status");
 
                 }
             }
@@ -235,6 +263,7 @@ namespace HouseMangment.Controllers
             }
             else
             {
+                // Check if the user is an admin
                 if (hisadmin != true)
                 {
                     return RedirectToAction("myassign", "status");
@@ -274,9 +303,9 @@ namespace HouseMangment.Controllers
                 add.isAdmin = false;
 
                 db.SaveChanges();
-                ViewBag.good = "registered successfully, please wait for the user to be activated by the administrator";
-                return View();
-            
+                TempData["good"] = "registered successfully, please wait for the user to be activated by the administrator";
+                return RedirectToAction("login", TempData["good"]);
+
 
         }
         [HttpGet]
@@ -297,6 +326,7 @@ namespace HouseMangment.Controllers
         }
         public ActionResult Active(int id)
         {
+            // Check if the user is an admin
             if (hisadmin == true)
             {
 
@@ -312,6 +342,122 @@ namespace HouseMangment.Controllers
         }
 
 
+        public ActionResult profile()
+        {
 
+            // Check if the user is login
+            if (logged == true)
+            {
+                
+                Users users = db.Users.Find(myid);
+                if (users == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(users);
+            }
+            else
+            {
+                return RedirectToAction("login");
+            }
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult profile(Users users)
+        {
+            // Check if the user is login
+            if (logged == true)
+            {
+                if (ModelState.IsValid)
+                {
+                    var upd = db.Users.Find(myid);
+
+                    var compare = db.Users.Where(m => m.username == users.username).Where(u => u.Id != myid).Count();
+                    while (compare > 0)
+                    {
+                        return RedirectToAction("profile", TempData["username"] = true);
+
+                    }
+                    upd.name = users.name;
+                    upd.phone = users.phone;
+                    upd.username = users.username;
+
+
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index", TempData["SuccessMessage"] = true);
+                }
+                return View();
+
+            }
+            else
+            {
+                return RedirectToAction("login");
+            }
+        }
+        public ActionResult ChangePassword()
+        {
+
+            // Check if the user is login
+            if (logged == true)
+            {
+
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("login");
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePassword(Users users)
+        {
+            // Check if the user is login
+            if (logged == true)
+            {
+                var upd = db.Users.Find(myid);
+
+                if (users.Password != users.rePassword)
+                {
+                    return RedirectToAction("changepassword", TempData["nocomp"] = true);
+
+                }
+
+                var compare = db.Users.Where(m => m.Password == users.CrPassword).Where(u => u.Id == myid).Any();
+                if (compare == true)
+                {
+                    upd.Password = users.Password;
+                    db.SaveChanges();
+                    return RedirectToAction("index", TempData["SuccessMessage"] = true);
+
+                }
+                return RedirectToAction("changepassword", TempData["nopass"] = true);
+
+            }
+            else
+            {
+                return RedirectToAction("login");
+            }
+        }
+
+
+
+        public ActionResult Report()
+        {
+            if (logged == true)
+            {
+                var users = db.Users.Where(x => x.isActive == true && x.isAdmin != true && x.IsDeleted != true);
+                return new ViewAsPdf("Report", users);
+            }
+            else
+            {
+                return RedirectToAction("login");
+            }
+        }
     }
+
+
 }

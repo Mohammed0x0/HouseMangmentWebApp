@@ -34,6 +34,11 @@
             <th>
                 date end
             </th>
+
+            <th>
+                Time Difference (Days)
+
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -56,9 +61,20 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.DateStart)
                 </td>
-
                 <td>
                     @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+
+                <td>
+                    @{
+                        TimeSpan diff = (TimeSpan)(item.EndDate - item.DateStart);
+                        //int diffDays = (int)diff.TotalDays;
+                        String.Format("{0} days, {1} hours, {2} minutes, {3} seconds",
+                        diff.Days, diff.Hours, diff.Minutes, diff.Seconds);
+                        
+                    }
+
+                    @diff.Days 
                 </td>
 
             </tr>

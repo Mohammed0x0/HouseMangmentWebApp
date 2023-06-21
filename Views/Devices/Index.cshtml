@@ -6,37 +6,50 @@
 }
 
 <h2>Index</h2>
-@if (TempData["SuccessMessage"] != null)
+
+
+@if (TempData["inassign"] != null)
 {
-    <div class="alert alert-success alert-dismissable">
-        <strong>Executed successfully</strong>
-    </div>
+    <script>window.onload = function () { erroralert() };</script>
 }
-else if (TempData["ErrorMessage"] != null)
+else if (TempData["id"] != null)
 {
-    <div class="alert alert-success alert-danger">
-        <strong>an error occurred</strong>
-    </div>
+    <script>window.onload = function () { confalert() };</script>
+
+}
+else if (TempData["deleted"] != null)
+{
+    <script>window.onload = function () { deleted() };</script>
+
 }
 
 
 <div>
-    <a href="@Url.Action("Create")"><button type="button" class="btn btn-outline-success">Create new device</button></a>
+    <br>
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <a href="@Url.Action("Create")" class="btn btn-outline-success">Create new device</a>
+        </div>
+        <div>
+            <a href="@Url.Action("ReportDevices")" target="_blank" class="btn btn-outline-dark">Devices Report</a>
+        </div>
+    </div>
     <hr>
 </div>
 
 
-<table class="table" id="DataTable1">
+<table class="table table table-striped" id="DataTable1">
     <thead>
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SerialNumber)
-        </th>
-        <th>
-        </th></tr>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SerialNumber)
+            </th>
+            <th>
+            </th>
+        </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
@@ -59,3 +72,39 @@ else if (TempData["ErrorMessage"] != null)
         }
     </tbody>
 </table>
+
+<script>
+    function erroralert() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'This device assign to user , please Unassign from user'
+
+        })
+    }
+
+    function confalert() {
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location ='Deletet/@TempData["id"]'
+            }
+        })
+    }
+    function deleted() {
+        Swal.fire(
+                    'Deleted!',
+                    'user has been deleted.',
+                    'success'
+                )
+    }
+
+</script>

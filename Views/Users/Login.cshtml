@@ -7,80 +7,112 @@
 
 
 
-    <style>
-        .h-75 {
-            height: 75% !important;
-        }
-    </style>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    <link rel="stylesheet" href="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/dist/mdb5/standard/core.min.css">
-
-    <link rel='stylesheet' id='roboto-subset.css-css' href='https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/mdb5/fonts/roboto-subset.css?ver=3.9.0-update.5' type='text/css' media='all' />
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
+<style>
+    body {
+        background: url('../content/background.gif');
+        background-repeat: no-repeat;
+  background-size: 100% 100%;
+    }
+    .form-control, .form-control:focus {
         
-        <section class="vh-100">
-            <div class="container-fluid h-custom">
+        height: 40px;
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<link rel="stylesheet" href="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/dist/mdb5/standard/core.min.css">
+
+<link rel='stylesheet' id='roboto-subset.css-css' href='https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/mdb5/fonts/roboto-subset.css?ver=3.9.0-update.5' type='text/css' media='all' />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <section class="vh-100">
+        <div class="container-fluid h-custom">
 
 
-                <div class="row d-flex justify-content-center align-items-center h-75">
-                   <center> <h2>Warehouse management system</h2></center>
+            <div class="row d-flex justify-content-center align-items-center ">
 
-                    @if (@ViewBag.LoginError != null)
-                    {
-                        <div class="alert alert-success alert-danger">
-                            <strong>@ViewBag.LoginError</strong>
+
+               
+
+                <!-- Background image -->
+                <!-- Background image -->
+                @*<div class="row">
+                        <img src="https://i.pinimg.com/originals/7c/71/4c/7c714cab765d96d1dcecfc963d2b4c26.gif" alt="Alternate Text" />
+                    </div>*@
+
+                <div class="col-md-4">
+
+                    <div id="content" class="row">
+
+                        <div id="loginForm">
+                            <div class="card shadow-5-strong"
+                                 style=" top: 50%; background: hsl(0deg 0% 100% / 74%); backdrop-filter: blur(30px); ">
+                                <div class="card-body">
+                                    <form>
+                                        <center><h3 class="card-title">WareHouse Management System</h3></center>
+                                        @if (@ViewBag.LoginError != null)
+                                        {
+                                            <div class="alert alert-success alert-danger">
+                                                <strong>@ViewBag.LoginError</strong>
+                                            </div>
+                                        }
+                                        @if (TempData["good"] != null)
+                                        {
+                                            <div class="alert alert-success alert-success">
+                                                <strong>@TempData["good"]</strong>
+                                            </div>
+                                        }
+                                        <br>
+                                        <div class="login-page_logo">
+                                            <img src="" alt="" class="login-page_logo_img">
+                                        </div>
+
+                                        <p class="lead fw-normal mb-0 me-3"></p>
+
+
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.username, htmlAttributes: new { @class = "" })
+                                            <div class="">
+                                                @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "" })
+                                            <div class="">
+                                                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                            </div>
+
+                                            <div class="text-center text-lg-start mt-3">
+                                                <button type="submit" class="btn btn-primary btn-lg"
+                                                        style="width:100%">
+                                                    Login
+                                                </button>
+                                                <p class=" fw-bold mt-2 pt-1 mb-0">
+                                                    Dont have a account? <a href="@Url.Action("Register")" class="link-danger">Sign Up</a>
+                                                </p>
+                                            </div>
+
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                    }
-                    <div class="col-md-9 col-lg-6 col-xl-5">
-                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-                             class="img-fluid" alt="Sample image">
-                    </div>
-                    <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                        <form>
-                            <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
-                                <p class="lead fw-normal mb-0 me-3">Login</p>
-                            </div>
-
-                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.username, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-10">
-                                    @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-10">
-                                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-                                </div>
-
-                                <div class="text-center text-lg-start mt-4 pt-2">
-                                    <button type="submit" class="btn btn-primary btn-lg"
-                                            style="padding-left: 2.5rem; padding-right: 2.5rem;">
-                                        Login
-                                    </button>
-                                    <p class=" fw-bold mt-2 pt-1 mb-0">
-                                        Dont have a account? <a href="@Url.Action("Register")" class="link-danger">Sign Up</a>
-                                    </p>
-                                </div>
-
-                        </form>
                     </div>
                 </div>
             </div>
-      
-        </section>
-    }
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/jqueryval")
+        </div>
 
-        @section Scripts {
-            @Scripts.Render("~/bundles/jqueryval")
-        }
+    </section>
+}
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

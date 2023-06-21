@@ -25,7 +25,7 @@ namespace HouseMangment.Entity
         public string SerialNumber { get; set; }
         public bool isActive { get; set; }
 
-        public string numser { get { return Name + " - " + SerialNumber; } }
+        public virtual string numser { get { return Name + " - " + SerialNumber; } }
 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

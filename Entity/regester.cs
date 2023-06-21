@@ -9,6 +9,7 @@ namespace HouseMangment.Entity
 {
     public class regester
     {
+        public int Id { get; set; }
         [Required]
         [Display(Name = "Name")]
         public string name { get; set; }

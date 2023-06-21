@@ -10,6 +10,8 @@ using System.Web;
 using System.Web.Http.Results;
 using System.Web.Mvc;
 using HouseMangment.Entity;
+using Rotativa;
+
 
 namespace HouseMangment.Controllers
 
@@ -17,12 +19,18 @@ namespace HouseMangment.Controllers
     public class StatusController : Controller
 
     {
+        // Use proper access modifiers for class-level variables
         public bool hisadmin = UsersController.hisadmin;
+        public int myid = UsersController.myid;
+        public bool logged = UsersController.logged;
+
         private WhereHouseEntities db = new WhereHouseEntities();
         public ActionResult Index()
         {
+            // Check if the user is an admin
             if (hisadmin == true)
             {
+                // Retrieve a list of active statuses and include related device and user information
                 var status = db.Status.Where(x => x.isActive == true).Include(s => s.Devices).Include(s => s.Users);
                 return View(status.ToList());
             }
@@ -35,6 +43,7 @@ namespace HouseMangment.Controllers
 
         public ActionResult HestoryAssign()
         {
+            // Check if the user is an admin
             if (hisadmin == true)
             {
                 var status = db.Status.Where(x => x.isActive == false).Include(s => s.Devices).Include(s => s.Users);
@@ -50,46 +59,11 @@ namespace HouseMangment.Controllers
         // GET: Status/Create
         public ActionResult Create()
         {
-
-            // var query = db.Devices
-            //.Join(db.Status, d => d.Id, s => s.Device_id, (d, s) => new { dis = s.Device_id, di = d.Id, d.Name, d.SerialNumber })
-            //.Where(di != dis);
-            //var query1 = db.Devices;
-            //var query2 = db.Status.ToList();
-
-            //query1.Join(query1.is);
-
-            //var query3 =
-            //            Join query1 in db.Status.ToList()
-            //            on Devices.Id != status..;
-
-            //var q =
-            //     from b in db.Devices
-            //     join bm in db.Status on b.Id equals bm.Device_id
-            //     where bm.isActive == true
-            //     select b;
-
-            // var res = db.Devices.Join(db.Status,
-            //      s => s.Id,
-            //      c => c.Device_id,
-            // (s, c) => new { s, c })
-            //.Where(sc => sc.c.Device_id != s.id && sc.c.isActive == false)
-            //.Select(sc => sc.s);
-
-
-
-            //var statusd = db.Devices.Where(d => d.isActive != false).Join(da => da.Id, db.Status, d => d.Device_id).Where(da => da.Id == d => d.Device_id);
-            //ViewBag.Device_id = new SelectList(db.Devices.Where(d => d.isActive != false).Join(
-            //db.Status s => s.Id,
-
-
-            //var filteredEmployees = db.Devices.Where(a => a.isActive == true && !db.Status.Where(b => b.isActive == true).Select(b => b.Device_id).Contains(a.Id)).ToList();
-
-
+            // Check if the user is an admin
             if (hisadmin == true)
             {
                 ViewBag.Device_id = new SelectList(db.Devices.Where(a => a.isActive == true && !db.Status.Where(b => b.isActive == true).Select(b => b.Device_id).Contains(a.Id)), "Id", "numser");
-                ViewBag.User_id = new SelectList(db.Users.Where(d => d.isActive == true && d.isAdmin == false && d.IsDeleted != true), "Id", "numuser");
+                ViewBag.User_id = new SelectList(db.Users.Where(d => d.isActive == true && d.isAdmin != true && d.IsDeleted != true), "Id", "numuser");
                 return View();
             }
 
@@ -107,6 +81,7 @@ namespace HouseMangment.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Status status)
         {
+            // Check if the user is an admin
             if (hisadmin == true)
             {
                 if (ModelState.IsValid)
@@ -132,6 +107,7 @@ namespace HouseMangment.Controllers
 
         public ActionResult Unassing(int id)
         {
+            // Check if the user is an admin
             if (hisadmin == true)
             {
                 var findid = db.Status.Find(id);
@@ -152,9 +128,10 @@ namespace HouseMangment.Controllers
 
         public ActionResult myAssign()
         {
-            if (UsersController.logged == true)
+            // Check if the user is login
+            if (logged == true)
             {
-                var status = db.Status.Where(x => x.isActive == true && x.User_id == UsersController.myid).Include(s => s.Devices).Include(s => s.Users);
+                var status = db.Status.Where(x => x.isActive == true && x.User_id == myid).Include(s => s.Devices).Include(s => s.Users);
                 return View(status.ToList());
             }
 
@@ -166,9 +143,10 @@ namespace HouseMangment.Controllers
 
         public ActionResult myoldassign()
         {
-            if (UsersController.logged == true)
+            // Check if the user is login
+            if (logged == true)
             {
-                var status = db.Status.Where(x => x.isActive == false && x.User_id == UsersController.myid).Include(s => s.Devices).Include(s => s.Users);
+                var status = db.Status.Where(x => x.isActive == false && x.User_id == myid).Include(s => s.Devices).Include(s => s.Users);
                 return View(status.ToList());
             }
 
@@ -177,7 +155,6 @@ namespace HouseMangment.Controllers
                 return RedirectToAction("login", "users");
             }
         }
-
 
     }
 }

@@ -11,7 +11,8 @@ namespace HouseMangment.Entity
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Users
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -26,12 +27,15 @@ namespace HouseMangment.Entity
         public string username { get; set; }
         public Nullable<bool> isAdmin { get; set; }
         public Nullable<bool> isActive { get; set; }
+
         public string Password { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Status> Status { get; set; }
-        public string numuser { get { return name + " - " + username; } }
-
+        public virtual string numuser { get { return name + " - " + username; } }
+        
+        public virtual string rePassword { get; set; }
+        public virtual string CrPassword { get; set; }
     }
 }

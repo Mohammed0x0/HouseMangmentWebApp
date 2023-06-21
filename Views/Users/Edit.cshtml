@@ -15,6 +15,12 @@
 <div class="form-horizontal">
     <h4>Users</h4>
     <hr />
+    @if (TempData["username"] != null)
+    {
+        <script>window.onload = function () { username() };</script>
+
+    }
+
     <div>
         <a href="@Url.Action("index")"><button type="button" class="btn btn-outline-info">back</button></a>
 
@@ -63,6 +69,16 @@
     </div>
 </div>
 }
+<script>
+    function username() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Username is already registered'
+
+        })
+    }
+</script>
 
 
 @section Scripts {

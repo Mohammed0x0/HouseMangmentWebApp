@@ -6,10 +6,16 @@
 }
 
 <style>
-    .h-75 {
-        height: 75% !important;
+    body {
+        background: url('../content/background.gif');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
     }
-    </style>
+
+    .form-control, .form-control:focus {
+        height: 40px;
+    }
+</style>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
@@ -24,94 +30,101 @@
         <div class="container-fluid h-custom">
 
 
-            <div class="row d-flex justify-content-center align-items-center h-75">
-                <center> <h2>Warehouse management system</h2></center>
+            <div class="row d-flex justify-content-center align-items-center">
 
-                @if (@ViewBag.Message != null)
-                {
-                    <div class="row ">
-                        <div class="offset-2 col-md-8 alert alert-success alert-danger">
-                            <strong>@ViewBag.Message</strong>
+
+
+                <div class="col-md-4">
+
+                    <div id="content" class="row">
+
+                        <div id="loginForm">
+                            <div class="card shadow-5-strong"
+                                 style=" margin-top: 15%; background: hsl(0deg 0% 100% / 74%); backdrop-filter: blur(4px); ">
+                                <div class="card-body">
+                                    <form>
+                                        <center><h2 class="card-title">WareHouse Management System</h2></center>
+                                        @if (@ViewBag.Message != null)
+                                        {
+                                            <div class="row ">
+                                                <div class="offset-2 col-md-8 alert alert-success alert-danger">
+                                                    <strong>@ViewBag.Message</strong>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <div class="login-page_logo">
+                                            <img src="" alt="" class="login-page_logo_img">
+                                        </div>
+
+
+
+                                        <br>
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "" })
+                                            <div class="">
+                                                @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.phone, htmlAttributes: new { @class = "" })
+                                            <div class="">
+                                                @Html.EditorFor(model => model.phone, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.phone, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.username, htmlAttributes: new { @class = "" })
+                                            <div class="">
+                                                @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "" })
+                                            <div class="">
+                                                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.rePassword, htmlAttributes: new { @class = "" })
+                                            <div class="">
+                                                @Html.EditorFor(model => model.rePassword, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.rePassword, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+
+                                        <div class="text-center text-lg-start mt-4 pt-2">
+                                            <button type="submit" class="btn btn-primary btn-lg"
+                                                    style="width:100%">
+                                                Signup
+                                            </button>
+                                            <p class=" fw-bold mt-4 ">
+                                                Already have an account? <a href="@Url.Action("login")" class="link-danger">Login</a>
+                                            </p>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                }
-                @if (@ViewBag.good != null)
-                {
-                    <div class="alert alert-success alert-success">
-                        <strong>@ViewBag.good</strong>
-                    </div>
-                }
-                <div class="col-md-9 col-lg-6 col-xl-5">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-                         class="img-fluid" alt="Sample image">
-                </div>
-                <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                    <form>
-                        <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
-                            <p class="lead fw-normal mb-0 me-3">Sign up</p>
-                        </div>
-
-
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.phone, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.EditorFor(model => model.phone, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.phone, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.username, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.rePassword, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.EditorFor(model => model.rePassword, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.rePassword, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-
-                        <div class="text-center text-lg-start mt-4 pt-2">
-                            <button type="submit" class="btn btn-primary btn-lg"
-                                    style="padding-left: 2.5rem; padding-right: 2.5rem;">
-                                Signup
-                            </button>
-                            <p class=" fw-bold mt-2 pt-1 mb-0">
-                                Already have an account? <a href="@Url.Action("login")" class="link-danger">Login</a>
-                            </p>
-                        </div>
-
-                    </form>
                 </div>
             </div>
-            </div>
-        
+        </div>
+
+
     </section>
 
-    
+
 
 }
 

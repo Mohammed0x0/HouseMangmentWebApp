@@ -7,35 +7,43 @@
 
 <h2>Index</h2>
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success alert-dismissable">
-        <strong>Executed successfully</strong>
-    </div>
-}
-else if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-success alert-danger">
-        <strong>an error occurred</strong>
-    </div>
-}
 
+@if (TempData["inassign"] != null)
+{
+    <script>window.onload = function () { erroralert() };</script>
+}
+else if (TempData["name"] != null)
+{
+    <script>window.onload = function () { confalert() };</script>
+
+}
+else if (TempData["deleted"] != null)
+{
+    <script>window.onload = function () { deleted() };</script>
+
+}
 
 <div>
     <br>
-    <a href="@Url.Action("InactiveUsers")"><button type="button" class="btn btn-outline-dark">InactiveUsers 
-        
-        @if (ViewBag.coun != null){
-  <span style="background-color: red; width: 24px; display: inherit; padding: 2px; color: white; border-radius: 50%;">
-        @ViewBag.coun</span>
-        }
-         </button></a>
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <a href="@Url.Action("InactiveUsers")" class="btn btn-outline-dark">
+                Inactive Users
+               
+            </a>
+        </div>
+        <div>
+            <a href="@Url.Action("Report")" target="_blank" class="btn btn-outline-dark">
+                Users Report
+            </a>
+        </div>
+    </div>
     <hr>
 </div>
 
 
 
-<table class="table" id="DataTable1">
+<table class="table table table-striped" id="DataTable1">
     <thead>
 
         <tr>
@@ -75,3 +83,39 @@ else if (TempData["ErrorMessage"] != null)
     </tbody>
 
 </table>
+
+<script>
+    function erroralert() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'This user assigned to @TempData["countdev"] device , please Unassign before delete'
+
+        })
+    }
+
+    function confalert() {
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location ='Deletet/@TempData["id"]'
+            }
+        })
+    }
+    function deleted() {
+        Swal.fire(
+                    'Deleted!',
+                    'user has been deleted.',
+                    'success'
+                )
+    }
+
+</script>

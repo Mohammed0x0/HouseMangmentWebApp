@@ -6,7 +6,10 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Styles.Render("https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css")
+    @Styles.Render("https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.7.12/sweetalert2.css")
     @Scripts.Render("~/bundles/modernizr")
+    
+
     <style>
         .navbar.bg-dark {
             background-color: #1c578c !important;
@@ -16,7 +19,7 @@
 <body>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
         <div class="container">
-            @Html.ActionLink("Warehouse Management", "Index", "users", new { area = "" }, new { @class = "navbar-brand" })
+            @Html.ActionLink("WareHouse Management System", "Index", "users", new { area = "" }, new { @class = "navbar-brand" })
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -32,10 +35,25 @@
                         <li>@Html.ActionLink("Assign", "Index", "status", new { area = "" }, new { @class = "nav-link" })</li>
                     }
 
-                    @if (HouseMangment.Controllers.UsersController.logged == true )
+                    @if (HouseMangment.Controllers.UsersController.logged == true)
                     {
 
-                        <li class="float-right" style="color: white; background-color: #767373; border-radius: 10%">@Html.ActionLink("logout", "logout", "Users", new { area = "" }, new { @class = "nav-link" })</li>
+
+                        <il class="float-right bg-danger" style="position: absolute; right: 80px; top: 17px; color: white; background-color: #1c578c !important; border-radius: 10px; ">
+                            <div class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="38" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                                  <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                              </svg>
+                               <span> @HouseMangment.Controllers.UsersController.username  </span>
+                            </div>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="@Url.Action("../users/profile")">Profile</a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("../users/changepassword")">Change Password</a></li>
+                                <li><a style="color:red;" class="dropdown-item" href="@Url.Action("../users/logout")">Logout</a></li>
+
+                            </ul>
+                        </il>
+                        //<li class="float-right" style="color: white; background-color: #767373; border-radius: 10%">@Html.ActionLink("logout", "logout", "Users", new { area = "" }, new { @class = "nav-link" })</li>
                     }
 
                 </ul>
@@ -43,6 +61,16 @@
         </div>
     </nav>
     <div class="container body-content">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <script>window.onload = function () { SuccessMessage() };</script>
+
+        }
+        else if (TempData["ErrorMessage"] != null)
+        {
+            <script>window.onload = function () { ErrorMessage() };</script>
+
+        }
 
         @RenderBody()
         <hr />
@@ -54,12 +82,41 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js")
+    @Scripts.Render("https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.7.12/sweetalert2.all.js")
     @RenderSection("scripts", required: false)
-    
+    @Scripts.Render("https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js")
+
+    @Scripts.Render("https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js")
+
+
     <script>
         $(document).ready(function () {
-            $('#DataTable1').DataTable();
+            $('#DataTable1').DataTable({
+
+            });
         });
+
+        function ErrorMessage() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'an error occurred.'
+
+            })
+        }
+
+        function SuccessMessage() {
+            Swal.fire(
+                'success!',
+                'Executed successfully',
+                'success'
+            )
+        }
+
     </script>
+
+
+
+
 </body>
 </html>

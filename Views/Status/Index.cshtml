@@ -9,32 +9,21 @@
 
 <h2>  Active Assign</h2>
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success alert-dismissable">
-        <strong>Executed successfully</strong>
-    </div>
-}
-else if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-success alert-danger">
-        <strong>an error occurred</strong>
-    </div>
-}
-
 <div>
     <br>
-    <a href="@Url.Action("HestoryAssign")"><button type="button" class="btn btn-outline-dark">Hestory Assign</button></a>
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <a href="@Url.Action("Create")" class="btn btn-outline-success">Assign Device</a>
+        </div>
+        <div>
+            <a href="@Url.Action("HestoryAssign")" class="btn btn-outline-dark">History Assign</a>
+        </div>
+    </div>
     <hr>
 </div>
 
-<div>
-    <br>
-    <a href="@Url.Action("Create")"><button type="button" class="btn btn-outline-success">Assing Device</button></a>
-    
-</div>
 <br>
-<table class="table" id="DataTable1">
+<table class="table table table-striped" id="DataTable1">
     <thead>
         <tr>
             <th>
@@ -77,6 +66,10 @@ else if (TempData["ErrorMessage"] != null)
                     <a href="@Url.Action("Unassing", new { id = item.Id })"><button class="btn btn-danger">Unassing</button></a>
                 </td>
             </tr>
+
+
+
         }
+
     </tbody>
 </table>
